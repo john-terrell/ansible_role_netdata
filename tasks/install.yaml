@@ -1,0 +1,12 @@
+- name: Download the installation script
+  become: true
+  get_url:
+    url: https://my-netdata.io/kickstart.sh
+    dest: /opt/kickstart.sh
+    mode: +x
+  register: netdata_install_script
+
+- name: Install Netdata
+  become: true
+  command: /opt/kickstart.sh --dont-wait
+  when: netdata_install_script.changed

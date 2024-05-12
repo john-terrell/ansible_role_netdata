@@ -1,0 +1,24 @@
+- name: Claim to Netdata Cloud
+  block: 
+  - name: Claim to Netdata Cloud if not already
+    shell:
+      cmd: netdata-claim.sh -token={{ netdata_claim_token }} -rooms={{ netdata_claim_rooms }} -url={{ netdata_claim_url  }}
+      creates: /var/lib/netdata/cloud.d/claimed_id
+    become: yes
+  when: netdata_reclaim  == false
+
+- name: Re-claim a node to Netdata Cloud
+  block:
+  - name: Ensure uuidgen is installed
+    ansible.builtin.package:
+      name:
+        - uuid-runtime
+      state: present
+    register: uuidgen_result
+  
+  - name: Reclaim the node with `-id=`
+    shell: netdata-claim.sh -token={{ netdata_claim_token }} -rooms={{ netdata_claim_rooms }} -url={{ netdata_claim_url  }} -id=$(uuidgen)
+    when: uuidgen_result.stat.exists == true
+    notify: Restart Netdata
+    become: yes
+  when: netdata_reclaim  == true
