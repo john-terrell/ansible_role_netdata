@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  role_name: netdata
+  namespace: john-terrell
+  description: Ansible role for installing and set-up netdata.
+  author: John Terrell
+  license: MIT
+  min_ansible_version: 2.7
+  platforms:
+    - name: Ubuntu
+      versions:
+        - xenial
+        - bionic
+  galaxy_tags:
+    - netdata
+    - development
+dependencies: []
